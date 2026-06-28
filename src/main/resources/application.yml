@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: application_name
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/database_local}
+    username: ${USER_DB:postgres}
+    password: ${PASSWORD_DB:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        hbm2ddl:
+          schema_filter_provider: br.com.project.springboot.starter.template.api.configs.HibernateConfig
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+      ddl-auto: validate
+  flyway:
+    enabled: false
+    locations: classpath:db/migration
+  messages:
+    encoding: utf-8
+  output:
+    ansi:
+      enabled: detect
+  web:
+    locale: pt_BR
+    resources:
+      add-mappings: false
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 50MB
+      max-file-size: 50MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: noreply@email.com.br
+    password: 12345
+    protocol: smtp
+  jackson:
+    datatype:
+      datetime:
+        write-dates-as-timestamps: true
+
+server:
+  port: ${PORT:8080}
+  servlet:
+    context-path: ${CONTEXT_PATH:/base-url}
+
+logging:
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:%5p}) %clr(%-40.40logger{39}){cyan} %clr(:){faint} %clr([${spring.application.name}]){magenta}%clr(%X{requestUuid}){yellow}%clr(%X{requestPathContext}){blue} %clr(%m%n){%5p} ${LOG_EXCEPTION_CONVERSION_WORD:%wEx}'
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %clr([${spring.application.name}]){magenta}%clr(%X{requestPathContext}){magenta}%clr(%X{requestUuid}){magenta} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}'
+  level:
+    org:
+      hibernate:
+        type: trace
+    br.com.project.springboot.starter.template.api: DEBUG
+    root: INFO
