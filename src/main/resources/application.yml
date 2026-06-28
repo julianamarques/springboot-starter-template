@@ -38,8 +38,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: noreply@email.com.br
-    password: 12345
+    username: ${USER_EMAIL:noreply@email.com.br}
+    password: ${PASSWORD_EMAIL:12345}
     protocol: smtp
   jackson:
     datatype:
