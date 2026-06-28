@@ -18,7 +18,12 @@ public enum ApiMessageEnum {
     ACCESS_DENIED("message.api.access_denied"),
     UNKNOWN_ERROR("message.api.unknown_error"),
     SSL_HANDSHAKE_ERROR("message.api.ssl_handshake_error"),
-    EXTERNAL_SERVICE_UNAVAILABLE("message.api.external.unavailable_service");
+    EXTERNAL_SERVICE_UNAVAILABLE("message.api.external.unavailable_service"),
+    USER_NOT_FOUND("message.api.user_not_found"),
+    EMAIL_EXISTS("message.api.email_exists"),
+    INVALID_PASSWORD("message.api.invalid_password"),
+    INVALID_USER_OR_PASSWORD("message.api.user_or_password_invalid"),
+    ROLE_NOT_FOUND("message.api.role_not_found");
 
     ApiMessageEnum(String description) {
         this.description = description;

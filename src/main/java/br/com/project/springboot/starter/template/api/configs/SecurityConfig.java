@@ -1,5 +1,7 @@
 package br.com.project.springboot.starter.template.api.configs;
 
+import br.com.project.springboot.starter.template.api.filters.AuthFilter;
+import br.com.project.springboot.starter.template.api.filters.LogFilter;
 import br.com.project.springboot.starter.template.api.handlers.ApiAccessDeniedHandler;
 import br.com.project.springboot.starter.template.api.handlers.ApiAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -24,19 +27,27 @@ import java.util.List;
 public class SecurityConfig {
     private final ApiAccessDeniedHandler apiAccessDeniedHandler;
     private final ApiAuthenticationEntryPoint apiAuthenticationEntryPoint;
+    private final AuthFilter authFilter;
+    private final LogFilter logFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/health/check"
+                                "/health/check",
+                                "/auth/login",
+                                "/auth/create-user"
                         )
                         .permitAll()
+                        .anyRequest()
+                        .authenticated()
                 )
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigure()))
                 .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(logFilter, AuthFilter.class)
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
                     httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(apiAccessDeniedHandler);
                     httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(apiAuthenticationEntryPoint);
